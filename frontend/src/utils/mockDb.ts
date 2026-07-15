@@ -70,6 +70,47 @@ export interface ContactInquiry {
 // Seed Data
 const initialGames: Game[] = [
   {
+    id: 'game-aether-forge',
+    name: 'Project: Aether Forge',
+    slug: 'aether-forge',
+    genre: '2.5D Puzzle Action',
+    platforms: ['Web', 'PC'],
+    description: 'Control the Aether Core, manipulate gravity vectors, dodge ancient laser traps, and escape floating sandstone chambers in our premier playable release.',
+    story: 'Deep within floating stone ruins built of symmetrical sandstone and bronze, the Aether Core has awakened. You must guide this ancient energy cube through chambers filled with gravity inversion portals, rotating force fields, laser sweeps, and automated defensive drones. Align the geometric energy switches to reconstruct the central forge and escape back to the cosmos.',
+    features: [
+      'Dynamic Gravity Shifting: Flip, invert, or rotate gravity vectors 90 degrees to walk on walls and ceilings.',
+      'Procedural Soundscape: Deep synthesizer drones and stone mechanical sound effects generated entirely in real-time.',
+      'Sandstone & Bronze Visuals: Minimalist yet premium aesthetic matching Srishti Studios branding guidelines.',
+      'Memory Forge Puzzle: Solve the final puzzle chamber by aligning multi-axis pressure pads.'
+    ],
+    status: 'Released',
+    artworkUrl: '/aether_forge.png',
+    screenshots: [
+      '/aether_forge.png'
+    ],
+    trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    downloadLinks: {
+      steam: 'https://store.steampowered.com',
+      epic: 'https://store.epicgames.com'
+    },
+    systemRequirements: {
+      minimum: {
+        os: 'Windows 10/11 64-bit',
+        processor: 'Intel Core i3-6100 or AMD Ryzen 3 1200',
+        memory: '8 GB RAM',
+        graphics: 'NVIDIA GeForce GTX 960 or AMD Radeon RX 460',
+        storage: '2 GB available space'
+      },
+      recommended: {
+        os: 'Windows 10/11 64-bit',
+        processor: 'Intel Core i5-9600K or AMD Ryzen 5 3600',
+        memory: '16 GB RAM',
+        graphics: 'NVIDIA GeForce GTX 1660 Ti or AMD Radeon RX 5600 XT',
+        storage: '2 GB SSD storage'
+      }
+    }
+  },
+  {
     id: 'game-1',
     name: 'Symmetry: Shadows of the Mandala',
     slug: 'symmetry-shadows-of-the-mandala',

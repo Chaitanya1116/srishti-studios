@@ -156,6 +156,62 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Premier Featured Release Section */}
+        <section className="py-20 bg-gradient-to-b from-charcoal to-[#0A0A0A] relative border-t border-bronze/10">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold">Premier Release</span>
+              <h2 className="text-3xl md:text-5xl font-serif font-light mt-4 text-ivory">Playable Now</h2>
+              <div className="h-[1px] w-12 bg-bronze/40 mx-auto mt-4" />
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center bg-forest/5 border border-bronze/10 rounded-xl overflow-hidden backdrop-blur-sm shadow-2xl">
+              {/* Cover Artwork Container */}
+              <div className="lg:col-span-7 relative aspect-video w-full overflow-hidden group border-r border-bronze/5">
+                <div className="absolute inset-0 z-10 stone-noise pointer-events-none opacity-40 mix-blend-overlay" />
+                <div className="absolute inset-0 z-10 bg-gradient-to-r from-charcoal/40 to-transparent" />
+                <Image
+                  src="/aether_forge.png"
+                  alt="Project: Aether Forge Featured Banner"
+                  fill
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-102"
+                />
+              </div>
+
+              {/* Cover Details Panel */}
+              <div className="lg:col-span-5 p-8 sm:p-12 space-y-6">
+                <span className="inline-flex items-center rounded border border-gold/30 bg-gold/5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gold">
+                  Featured Title
+                </span>
+                
+                <h3 className="text-3xl font-serif font-light text-ivory tracking-wide leading-tight">
+                  Project: <br /><span className="gold-gradient-text italic font-normal">Aether Forge</span>
+                </h3>
+
+                <p className="text-xs sm:text-sm text-ivory/70 leading-relaxed font-light">
+                  Manipulate gravity vectors, escape ancient floating structures, and activate geometric energy shrines. Play the first official mini game from Srishti Studios directly in your browser.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <Link
+                    href="/games/aether-forge"
+                    className="group flex items-center justify-center gap-2 rounded bg-gold px-6 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-charcoal hover:bg-ivory hover:scale-[1.02] transition-all shadow-md cursor-pointer"
+                  >
+                    Play in Browser <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform cursor-pointer" />
+                  </Link>
+
+                  <Link
+                    href="/games/aether-forge"
+                    className="flex items-center justify-center gap-2 rounded border border-bronze/40 bg-transparent px-6 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-ivory hover:bg-bronze/10 transition-all cursor-pointer"
+                  >
+                    Details & Specs
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Symmetrical Mandala divider */}
         <MandalaDivider />
 
