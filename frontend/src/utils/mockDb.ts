@@ -1,8 +1,6 @@
-'use client';
+// Srishti Studios - Frontend Serverless Mock Database Storage
+// This manages content state directly within Next.js API routes.
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-// Interfaces matching backend models
 export interface Game {
   id: string;
   name: string;
@@ -69,37 +67,8 @@ export interface ContactInquiry {
   submittedAt: string;
 }
 
-interface AppContextType {
-  games: Game[];
-  posts: BlogPost[];
-  jobs: Job[];
-  inquiries: ContactInquiry[];
-  applications: JobApplication[];
-  token: string | null;
-  user: { username: string; role: string } | null;
-  loading: boolean;
-  backendOnline: boolean;
-  login: (token: string, user: { username: string; role: string }) => void;
-  logout: () => void;
-  refreshData: () => Promise<void>;
-  createGame: (game: Omit<Game, 'id'>) => Promise<boolean>;
-  updateGame: (id: string, game: Partial<Game>) => Promise<boolean>;
-  deleteGame: (id: string) => Promise<boolean>;
-  createPost: (post: Omit<BlogPost, 'id' | 'publishDate'>) => Promise<boolean>;
-  updatePost: (id: string, post: Partial<BlogPost>) => Promise<boolean>;
-  deletePost: (id: string) => Promise<boolean>;
-  createJob: (job: Omit<Job, 'id'>) => Promise<boolean>;
-  updateJob: (id: string, job: Partial<Job>) => Promise<boolean>;
-  deleteJob: (id: string) => Promise<boolean>;
-  submitApplication: (app: Omit<JobApplication, 'id' | 'submittedAt'>) => Promise<boolean>;
-  submitContact: (contact: Omit<ContactInquiry, 'id' | 'submittedAt'>) => Promise<boolean>;
-  subscribeNewsletter: (email: string) => Promise<boolean>;
-}
-
-const AppContext = createContext<AppContextType | undefined>(undefined);
-
-// Base mock content for client fallback
-const mockGamesFallback: Game[] = [
+// Seed Data
+const initialGames: Game[] = [
   {
     id: 'game-1',
     name: 'Symmetry: Shadows of the Mandala',
@@ -224,7 +193,7 @@ const mockGamesFallback: Game[] = [
   }
 ];
 
-const mockPostsFallback: BlogPost[] = [
+const initialPosts: BlogPost[] = [
   {
     id: 'post-1',
     title: 'Defining Srishti: Creative Philosophy in Modern Game Design',
@@ -287,7 +256,7 @@ Head over to our [Careers Page](/careers) to apply!`,
   }
 ];
 
-const mockJobsFallback: Job[] = [
+const initialJobs: Job[] = [
   {
     id: 'job-1',
     title: 'Senior Gameplay Engineer',
@@ -330,401 +299,150 @@ const mockJobsFallback: Job[] = [
   }
 ];
 
-const API_BASE = '/api';
-
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [games, setGames] = useState<Game[]>(mockGamesFallback);
-  const [posts, setPosts] = useState<BlogPost[]>(mockPostsFallback);
-  const [jobs, setJobs] = useState<Job[]>(mockJobsFallback);
-  const [inquiries, setInquiries] = useState<ContactInquiry[]>([]);
-  const [applications, setApplications] = useState<JobApplication[]>([]);
-  
-  const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<{ username: string; role: string } | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [backendOnline, setBackendOnline] = useState<boolean>(false);
-
-  // Sync token from localStorage on load
-  useEffect(() => {
-    const storedToken = localStorage.getItem('srishti_token');
-    const storedUser = localStorage.getItem('srishti_user');
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
-    refreshData();
-  }, []);
-
-  const refreshData = async () => {
-    setLoading(true);
-    try {
-      // Check server health
-      const statusRes = await fetch(`${API_BASE}/status`, { signal: AbortSignal.timeout(3000) });
-      if (statusRes.ok) {
-        setBackendOnline(true);
-        
-        // Fetch fresh content
-        const [gamesRes, newsRes, careersRes] = await Promise.all([
-          fetch(`${API_BASE}/games`),
-          fetch(`${API_BASE}/news`),
-          fetch(`${API_BASE}/careers`)
-        ]);
-
-        if (gamesRes.ok) setGames(await gamesRes.json());
-        if (newsRes.ok) setPosts(await newsRes.json());
-        if (careersRes.ok) setJobs(await careersRes.json());
-
-        // Protected fetches if logged in
-        const storedToken = localStorage.getItem('srishti_token');
-        if (storedToken) {
-          const [appsRes, inqsRes] = await Promise.all([
-            fetch(`${API_BASE}/applications`, { headers: { 'Authorization': `Bearer ${storedToken}` } }),
-            fetch(`${API_BASE}/inquiries`, { headers: { 'Authorization': `Bearer ${storedToken}` } })
-          ]);
-          if (appsRes.ok) setApplications(await appsRes.json());
-          if (inqsRes.ok) setInquiries(await inqsRes.json());
-        }
-      } else {
-        setBackendOnline(false);
-      }
-    } catch (e) {
-      setBackendOnline(false);
-      console.log('[Connection] Express backend offline. Using client mock database.');
-    } finally {
-      setLoading(false);
-    }
+// Persistent Global Storage for serverless context
+class ServerlessDatabase {
+  private games: Game[] = [...initialGames];
+  private posts: BlogPost[] = [...initialPosts];
+  private jobs: Job[] = [...initialJobs];
+  private applications: JobApplication[] = [];
+  private contacts: ContactInquiry[] = [];
+  private newsletters: string[] = [];
+  private analytics = {
+    visits: 24500,
+    gameClicks: 12400,
+    applicationsReceived: 42,
+    newsletterSubs: 1205
   };
 
-  const login = (jwtToken: string, userData: { username: string; role: string }) => {
-    setToken(jwtToken);
-    setUser(userData);
-    localStorage.setItem('srishti_token', jwtToken);
-    localStorage.setItem('srishti_user', JSON.stringify(userData));
-    refreshData();
+  private adminUser = {
+    username: 'admin',
+    passwordHash: '$2a$10$U2c58G96VscRUpWv1v/W3e4yPecwY.uV7w/iCgT9U/Gj3H6fpe80C' // 'srishti2026'
   };
 
-  const logout = () => {
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem('srishti_token');
-    localStorage.removeItem('srishti_user');
-    setApplications([]);
-    setInquiries([]);
-  };
+  public getAdmin() {
+    return this.adminUser;
+  }
 
-  // --- CRUD ACTIONS ---
-
-  const createGame = async (gameData: Omit<Game, 'id'>) => {
-    if (backendOnline && token) {
-      try {
-        const res = await fetch(`${API_BASE}/games`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(gameData)
-        });
-        if (res.ok) {
-          await refreshData();
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
+  // Games
+  public getGames() { return this.games; }
+  public getGameBySlug(slug: string) { return this.games.find(g => g.slug === slug); }
+  public createGame(game: Omit<Game, 'id'>) {
+    const newGame: Game = { ...game, id: `game-${Date.now()}` };
+    this.games.push(newGame);
+    this.analytics.gameClicks += 10;
+    return newGame;
+  }
+  public updateGame(id: string, updated: Partial<Game>) {
+    const idx = this.games.findIndex(g => g.id === id);
+    if (idx !== -1) {
+      this.games[idx] = { ...this.games[idx], ...updated } as Game;
+      return this.games[idx];
     }
-    // Client fallback
-    const localNew: Game = { ...gameData, id: `game-${Date.now()}` };
-    setGames(prev => [...prev, localNew]);
+    return null;
+  }
+  public deleteGame(id: string) {
+    this.games = this.games.filter(g => g.id !== id);
     return true;
-  };
+  }
 
-  const updateGame = async (id: string, gameData: Partial<Game>) => {
-    if (backendOnline && token) {
-      try {
-        const res = await fetch(`${API_BASE}/games/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(gameData)
-        });
-        if (res.ok) {
-          await refreshData();
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    // Client fallback
-    setGames(prev => prev.map(g => g.id === id ? { ...g, ...gameData } as Game : g));
-    return true;
-  };
-
-  const deleteGame = async (id: string) => {
-    if (backendOnline && token) {
-      try {
-        const res = await fetch(`${API_BASE}/games/${id}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (res.ok) {
-          await refreshData();
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    // Client fallback
-    setGames(prev => prev.filter(g => g.id !== id));
-    return true;
-  };
-
-  const createPost = async (postData: Omit<BlogPost, 'id' | 'publishDate'>) => {
-    if (backendOnline && token) {
-      try {
-        const res = await fetch(`${API_BASE}/news`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(postData)
-        });
-        if (res.ok) {
-          await refreshData();
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    // Client fallback
-    const localNew: BlogPost = {
-      ...postData,
+  // Blog Posts
+  public getPosts() { return this.posts; }
+  public getPostBySlug(slug: string) { return this.posts.find(p => p.slug === slug); }
+  public createPost(post: Omit<BlogPost, 'id' | 'publishDate'>) {
+    const newPost: BlogPost = {
+      ...post,
       id: `post-${Date.now()}`,
       publishDate: new Date().toISOString().split('T')[0]
     };
-    setPosts(prev => [localNew, ...prev]);
-    return true;
-  };
-
-  const updatePost = async (id: string, postData: Partial<BlogPost>) => {
-    if (backendOnline && token) {
-      try {
-        const res = await fetch(`${API_BASE}/news/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(postData)
-        });
-        if (res.ok) {
-          await refreshData();
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
+    this.posts.unshift(newPost);
+    return newPost;
+  }
+  public updatePost(id: string, updated: Partial<BlogPost>) {
+    const idx = this.posts.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      this.posts[idx] = { ...this.posts[idx], ...updated } as BlogPost;
+      return this.posts[idx];
     }
-    // Client fallback
-    setPosts(prev => prev.map(p => p.id === id ? { ...p, ...postData } as BlogPost : p));
+    return null;
+  }
+  public deletePost(id: string) {
+    this.posts = this.posts.filter(p => p.id !== id);
     return true;
-  };
+  }
 
-  const deletePost = async (id: string) => {
-    if (backendOnline && token) {
-      try {
-        const res = await fetch(`${API_BASE}/news/${id}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (res.ok) {
-          await refreshData();
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
+  // Careers/Jobs
+  public getJobs() { return this.jobs; }
+  public createJob(job: Omit<Job, 'id'>) {
+    const newJob: Job = { ...job, id: `job-${Date.now()}` };
+    this.jobs.push(newJob);
+    return newJob;
+  }
+  public updateJob(id: string, updated: Partial<Job>) {
+    const idx = this.jobs.findIndex(j => j.id === id);
+    if (idx !== -1) {
+      this.jobs[idx] = { ...this.jobs[idx], ...updated } as Job;
+      return this.jobs[idx];
     }
-    // Client fallback
-    setPosts(prev => prev.filter(p => p.id !== id));
+    return null;
+  }
+  public deleteJob(id: string) {
+    this.jobs = this.jobs.filter(j => j.id !== id);
     return true;
-  };
+  }
 
-  const createJob = async (jobData: Omit<Job, 'id'>) => {
-    if (backendOnline && token) {
-      try {
-        const res = await fetch(`${API_BASE}/careers`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(jobData)
-        });
-        if (res.ok) {
-          await refreshData();
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    // Client fallback
-    const localNew: Job = { ...jobData, id: `job-${Date.now()}` };
-    setJobs(prev => [...prev, localNew]);
-    return true;
-  };
-
-  const updateJob = async (id: string, jobData: Partial<Job>) => {
-    if (backendOnline && token) {
-      try {
-        const res = await fetch(`${API_BASE}/careers/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(jobData)
-        });
-        if (res.ok) {
-          await refreshData();
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    // Client fallback
-    setJobs(prev => prev.map(j => j.id === id ? { ...j, ...jobData } as Job : j));
-    return true;
-  };
-
-  const deleteJob = async (id: string) => {
-    if (backendOnline && token) {
-      try {
-        const res = await fetch(`${API_BASE}/careers/${id}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (res.ok) {
-          await refreshData();
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    // Client fallback
-    setJobs(prev => prev.filter(j => j.id !== id));
-    return true;
-  };
-
-  const submitApplication = async (appData: Omit<JobApplication, 'id' | 'submittedAt'>) => {
-    if (backendOnline) {
-      try {
-        const res = await fetch(`${API_BASE}/applications`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(appData)
-        });
-        if (res.ok) {
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    // Client fallback
-    const localApp: JobApplication = {
-      ...appData,
+  // Job Applications
+  public getApplications() { return this.applications; }
+  public createApplication(app: Omit<JobApplication, 'id' | 'submittedAt'>) {
+    const newApp: JobApplication = {
+      ...app,
       id: `app-${Date.now()}`,
       submittedAt: new Date().toISOString()
     };
-    setApplications(prev => [localApp, ...prev]);
-    return true;
-  };
+    this.applications.unshift(newApp);
+    this.analytics.applicationsReceived += 1;
+    return newApp;
+  }
 
-  const submitContact = async (contactData: Omit<ContactInquiry, 'id' | 'submittedAt'>) => {
-    if (backendOnline) {
-      try {
-        const res = await fetch(`${API_BASE}/contact`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(contactData)
-        });
-        if (res.ok) {
-          return true;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    // Client fallback
-    const localContact: ContactInquiry = {
-      ...contactData,
+  // Contact Inquiry
+  public getInquiries() { return this.contacts; }
+  public createInquiry(contact: Omit<ContactInquiry, 'id' | 'submittedAt'>) {
+    const newContact: ContactInquiry = {
+      ...contact,
       id: `contact-${Date.now()}`,
       submittedAt: new Date().toISOString()
     };
-    setInquiries(prev => [...prev, localContact]);
-    return true;
-  };
+    this.contacts.push(newContact);
+    return newContact;
+  }
 
-  const subscribeNewsletter = async (email: string) => {
-    if (backendOnline) {
-      try {
-        const res = await fetch(`${API_BASE}/newsletter`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-        if (res.ok) return true;
-      } catch (e) {
-        console.error(e);
-      }
+  // Newsletter Sub
+  public getNewsletters() { return this.newsletters; }
+  public addNewsletter(email: string) {
+    if (!this.newsletters.includes(email)) {
+      this.newsletters.push(email);
+      this.analytics.newsletterSubs += 1;
     }
     return true;
-  };
+  }
 
-  return (
-    <AppContext.Provider value={{
-      games,
-      posts,
-      jobs,
-      inquiries,
-      applications,
-      token,
-      user,
-      loading,
-      backendOnline,
-      login,
-      logout,
-      refreshData,
-      createGame,
-      updateGame,
-      deleteGame,
-      createPost,
-      updatePost,
-      deletePost,
-      createJob,
-      updateJob,
-      deleteJob,
-      submitApplication,
-      submitContact,
-      subscribeNewsletter
-    }}>
-      {children}
-    </AppContext.Provider>
-  );
-};
+  // Analytics
+  public getAnalytics() {
+    return {
+      ...this.analytics,
+      gameCount: this.games.length,
+      blogCount: this.posts.length,
+      jobCount: this.jobs.length,
+      applicationCount: this.applications.length,
+      inquiryCount: this.contacts.length
+    };
+  }
+}
 
-export const useApp = () => {
-  const context = useContext(AppContext);
-  if (!context) throw new Error('useApp must be used within an AppProvider');
-  return context;
-};
+// Cache the serverless instance to prevent re-instantiation in Vercel hot-reloads
+const globalRef = global as unknown as { mockDbInstance?: ServerlessDatabase };
+if (!globalRef.mockDbInstance) {
+  globalRef.mockDbInstance = new ServerlessDatabase();
+}
+
+export const mockDb = globalRef.mockDbInstance;
+export default mockDb;
