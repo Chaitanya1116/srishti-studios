@@ -20,16 +20,17 @@ interface GameDetailsProps {
 export default function GameDetails({ params }: GameDetailsProps) {
   const resolvedParams = use(params);
   const { games } = useApp();
+  const slug = resolvedParams.slug?.toLowerCase();
 
-  if (resolvedParams.slug === 'rangrush') {
+  if (slug === 'rangrush') {
     return <RangRushPage />;
   }
 
-  if (resolvedParams.slug === 'aether-forge') {
+  if (slug === 'aether-forge') {
     return <AetherForgeDetails />;
   }
 
-  const game = games.find((g) => g.slug === resolvedParams.slug);
+  const game = games.find((g) => g.slug.toLowerCase() === slug);
 
   if (!game) {
     return (
