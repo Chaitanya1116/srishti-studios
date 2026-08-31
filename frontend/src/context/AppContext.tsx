@@ -449,7 +449,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           fetch(`${API_BASE}/careers`)
         ]);
 
-        if (gamesRes.ok) setGames(await gamesRes.json());
+        if (gamesRes.ok) {
+          const fetchedGames: Game[] = await gamesRes.json();
+          const rangRushGame = mockGamesFallback.find(g => g.slug === 'rangrush');
+          if (rangRushGame && !fetchedGames.some(g => g.slug === 'rangrush')) {
+            fetchedGames.unshift(rangRushGame);
+          }
+          setGames(fetchedGames);
+        }
         if (newsRes.ok) setPosts(await newsRes.json());
         if (careersRes.ok) setJobs(await careersRes.json());
 

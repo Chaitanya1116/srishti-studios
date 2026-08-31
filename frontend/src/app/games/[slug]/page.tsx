@@ -10,6 +10,9 @@ import PageWrapper from '@/components/PageWrapper';
 import { useApp } from '@/context/AppContext';
 import { ArrowLeft, Play, Cpu, Database, Monitor, Shield, Laptop, Download, Calendar, ExternalLink } from 'lucide-react';
 
+import RangRushPage from '../rangrush/page';
+import AetherForgeDetails from '../aether-forge/page';
+
 interface GameDetailsProps {
   params: Promise<{ slug: string }>;
 }
@@ -17,6 +20,15 @@ interface GameDetailsProps {
 export default function GameDetails({ params }: GameDetailsProps) {
   const resolvedParams = use(params);
   const { games } = useApp();
+
+  if (resolvedParams.slug === 'rangrush') {
+    return <RangRushPage />;
+  }
+
+  if (resolvedParams.slug === 'aether-forge') {
+    return <AetherForgeDetails />;
+  }
+
   const game = games.find((g) => g.slug === resolvedParams.slug);
 
   if (!game) {
