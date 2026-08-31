@@ -405,9 +405,17 @@ class MockDatabase {
 
   // Games
   public getGames() {
-    if (!this.games.some(g => g.slug === 'rangrush')) {
-      const rangRush = initialGames.find(g => g.slug === 'rangrush');
-      if (rangRush) this.games.unshift(rangRush);
+    const rangRush = initialGames[0];
+    const idx = this.games.findIndex(g => g.slug === 'rangrush' || g.id === 'game-rangrush' || g.name.toLowerCase().includes('rangrush'));
+    if (idx === -1) {
+      this.games.unshift(rangRush);
+    } else {
+      this.games[idx] = {
+        ...rangRush,
+        ...this.games[idx],
+        status: 'Released',
+        slug: 'rangrush'
+      };
     }
     return this.games;
   }

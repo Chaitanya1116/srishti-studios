@@ -451,9 +451,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         if (gamesRes.ok) {
           const fetchedGames: Game[] = await gamesRes.json();
-          const rangRushGame = mockGamesFallback.find(g => g.slug === 'rangrush');
-          if (rangRushGame && !fetchedGames.some(g => g.slug === 'rangrush')) {
+          const rangRushGame = mockGamesFallback[0];
+          const existingIdx = fetchedGames.findIndex(g => g.slug === 'rangrush' || g.id === 'game-rangrush' || g.name.toLowerCase().includes('rangrush'));
+          
+          if (existingIdx === -1) {
             fetchedGames.unshift(rangRushGame);
+          } else {
+            fetchedGames[existingIdx] = {
+              ...rangRushGame,
+              ...fetchedGames[existingIdx],
+              status: 'Released',
+              slug: 'rangrush'
+            };
           }
           setGames(fetchedGames);
         }
