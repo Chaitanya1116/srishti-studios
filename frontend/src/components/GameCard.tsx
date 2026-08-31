@@ -85,14 +85,23 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
           {/* Wishlist/Download Action */}
           {game.status === 'Released' ? (
-            <a
-              href={game.downloadLinks.steam || game.downloadLinks.epic || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1.5 rounded bg-gold py-2 text-[10px] uppercase font-bold tracking-widest text-charcoal hover:bg-ivory transition-all"
-            >
-              Get Game <Download size={12} />
-            </a>
+            game.downloadLinks.steam || game.downloadLinks.epic ? (
+              <a
+                href={game.downloadLinks.steam || game.downloadLinks.epic}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 rounded bg-gold py-2 text-[10px] uppercase font-bold tracking-widest text-charcoal hover:bg-ivory transition-all"
+              >
+                Get Game <Download size={12} />
+              </a>
+            ) : (
+              <Link
+                href={`/games/${game.slug}`}
+                className="flex items-center justify-center gap-1.5 rounded bg-gold py-2 text-[10px] uppercase font-bold tracking-widest text-charcoal hover:bg-ivory transition-all"
+              >
+                Play Now <Play size={12} className="fill-current" />
+              </Link>
+            )
           ) : (
             <a
               href={game.downloadLinks.steam || '#'}
