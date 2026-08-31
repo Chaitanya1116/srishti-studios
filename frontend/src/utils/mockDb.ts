@@ -70,6 +70,44 @@ export interface ContactInquiry {
 // Seed Data
 const initialGames: Game[] = [
   {
+    id: 'game-rangrush',
+    name: 'RangRush: Elements of Srishti',
+    slug: 'rangrush',
+    genre: 'Match-3 Fantasy Puzzle',
+    platforms: ['Web', 'Mobile', 'PC'],
+    description: 'Master the six mystical elements of Srishti in an original browser match-3 puzzle game with 20 levels, powerful elemental bursts, and cascading combos.',
+    story: 'Awaken the elemental forces of creation: Agni, Jala, Prithvi, Vajra, Chandra, and Surya. Navigate 20 intricate puzzle chambers, shatter ancient stone seals, and harness powerful elemental line blasters and area bursts to resolve the great mandala.',
+    features: [
+      'Six Mystical Elements: Agni (Fire), Jala (Water), Prithvi (Earth), Vajra (Lightning), Chandra (Moon), and Surya (Sun).',
+      '20 Playable Levels: Increasing difficulty, move limits, score targets, and obstacle clearing goals.',
+      'Elemental Power-Ups: Agni Blast (Row), Vajra Strike (Column), Surya Burst (Area), and Chandra Shatter (Multi-target).',
+      'Cascading Combo System: Chain reaction match multipliers with real-time procedural Web Audio API synthesis.'
+    ],
+    status: 'Released',
+    artworkUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop',
+    screenshots: [
+      'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop'
+    ],
+    trailerUrl: '',
+    downloadLinks: {},
+    systemRequirements: {
+      minimum: {
+        os: 'Any Web Browser / Windows / macOS / Android / iOS',
+        processor: 'Modern Dual-Core CPU',
+        memory: '2 GB RAM',
+        graphics: 'HTML5 Canvas Compatible GPU',
+        storage: 'Online Browser Playable'
+      },
+      recommended: {
+        os: 'Modern Web Browser (Chrome, Firefox, Safari, Edge)',
+        processor: 'Quad-Core CPU',
+        memory: '4 GB RAM',
+        graphics: 'Hardware Accelerated Graphics',
+        storage: 'Online Browser Playable'
+      }
+    }
+  },
+  {
     id: 'game-aether-forge',
     name: 'Project: Aether Forge',
     slug: 'aether-forge',
