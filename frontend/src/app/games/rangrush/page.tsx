@@ -42,9 +42,9 @@ export default function RangRushPage() {
   const [lastGameScore, setLastGameScore] = useState<number>(0);
   const [lastGameStars, setLastGameStars] = useState<number>(0);
 
-  // Sync state from LocalStorage on mount
   useEffect(() => {
-    setUnlockedLevel(RangRushStorage.getUnlockedLevel());
+    const unl = RangRushStorage.getUnlockedLevel();
+    setUnlockedLevel(unl);
     setLevelStars(RangRushStorage.getLevelStars());
     setBestScores(RangRushStorage.getBestScores());
     const savedSettings = RangRushStorage.getSettings();
@@ -52,10 +52,20 @@ export default function RangRushPage() {
     rangRushAudio.setSoundEnabled(savedSettings.soundEnabled);
     rangRushAudio.setMusicEnabled(savedSettings.musicEnabled);
     setAchievements(RangRushStorage.getAchievements());
+
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('play') === 'true' || params.get('mode') === 'game') {
+        const lev = RANGRUSH_LEVELS.find(l => l.id === unl) || RANGRUSH_LEVELS[0];
+        setCurrentLevel(lev);
+        setScreen('GAME');
+        setInteractiveMode(true);
+      }
+    }
   }, []);
 
   // Launch direct gameplay mode
-  const launchInteractiveGame = (startScreen: ScreenState = 'SPLASH', targetLevel?: LevelConfig) => {
+  const launchInteractiveGame = (startScreen: ScreenState = 'GAME', targetLevel?: LevelConfig) => {
     if (targetLevel) setCurrentLevel(targetLevel);
     setScreen(startScreen);
     setInteractiveMode(true);
@@ -261,10 +271,25 @@ export default function RangRushPage() {
           <div className="absolute bottom-10 left-0 right-0 z-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="max-w-2xl">
-                <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-gold bg-gold/10 border border-gold/20 rounded px-2.5 py-0.5 backdrop-blur-sm">
-                  Playable Release
-                </span>
-                <h1 className="text-4xl sm:text-6xl font-serif font-light tracking-wide text-ivory mt-4">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-gold bg-gold/10 border border-gold/20 rounded px-2.5 py-0.5 backdrop-blur-sm">
+                    Released Game
+                  </span>
+                  <div className="flex items-center gap-2 px-3 py-0.5 rounded border border-gold/30 bg-charcoal/80 backdrop-blur-sm">
+                    <div className="relative h-4 w-14">
+                      <Image
+                        src="/LOGO.png"
+                        alt="Srishti Studios Logo"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-gold">
+                      Powered by Srishti Studios
+                    </span>
+                  </div>
+                </div>
+                <h1 className="text-4xl sm:text-6xl font-serif font-light tracking-wide text-ivory mt-2">
                   RangRush: Elements of Srishti
                 </h1>
                 <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-xs tracking-wider text-sandstone uppercase font-medium">
@@ -287,7 +312,7 @@ export default function RangRushPage() {
               <h2 className="text-2xl font-serif text-ivory mt-0.5">Experience the Six Mystical Elements</h2>
             </div>
             <button
-              onClick={() => launchInteractiveGame('SPLASH')}
+              onClick={() => launchInteractiveGame('GAME')}
               className="flex items-center gap-3 px-8 py-4 rounded bg-gradient-to-r from-amber-600 via-gold to-amber-500 text-charcoal font-bold text-xs uppercase tracking-[0.2em] shadow-lg hover:scale-105 transition-transform"
             >
               <Play size={16} className="fill-current" /> Play RangRush Now
@@ -356,7 +381,7 @@ export default function RangRushPage() {
 
                   <div className="pt-4 flex flex-col gap-3">
                     <button
-                      onClick={() => launchInteractiveGame('SPLASH')}
+                      onClick={() => launchInteractiveGame('GAME')}
                       className="w-full flex items-center justify-center gap-2 py-4 rounded bg-gold text-charcoal font-bold text-xs uppercase tracking-widest hover:bg-ivory transition-colors shadow-md"
                     >
                       <Play size={14} className="fill-current" /> Launch Full Game

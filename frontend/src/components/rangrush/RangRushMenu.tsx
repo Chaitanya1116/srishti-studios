@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { rangRushAudio } from '@/utils/rangrushAudio';
-import { Play, Grid, Calendar, Award, Settings, ArrowLeft, Flame, Droplet, Leaf, Zap, Moon, Sun } from 'lucide-react';
+import { Play, Grid, Calendar, Award, Settings, ArrowLeft, Flame, Droplet, Leaf, Zap, Moon, Sun, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 interface RangRushMenuProps {
@@ -49,9 +50,21 @@ export const RangRushMenu: React.FC<RangRushMenuProps> = ({
         >
           <ArrowLeft size={14} /> Srishti Games
         </Link>
-        <span className="text-[10px] uppercase tracking-[0.25em] font-medium text-gold/80">
-          Srishti Studios Portfolio
-        </span>
+        
+        <div className="flex items-center gap-2.5 bg-gold/5 border border-gold/20 px-3.5 py-1.5 rounded-full backdrop-blur-sm">
+          <div className="relative h-5 w-16">
+            <Image
+              src="/LOGO.png"
+              alt="Srishti Studios Logo"
+              fill
+              className="object-contain"
+            />
+          </div>
+          <span className="h-3 w-[1px] bg-gold/30" />
+          <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-gold">
+            Powered by Srishti Studios
+          </span>
+        </div>
       </div>
 
       {/* Main Center Menu Container */}
@@ -134,7 +147,21 @@ export const RangRushMenu: React.FC<RangRushMenuProps> = ({
       </motion.div>
 
       {/* Footer Branding */}
-      <div className="relative z-10 py-4 text-center">
+      <div className="relative z-10 py-4 text-center flex flex-col sm:flex-row items-center justify-between w-full max-w-4xl border-t border-bronze/10 gap-2">
+        <div className="flex items-center gap-2">
+          <div className="relative h-4 w-14">
+            <Image
+              src="/LOGO.png"
+              alt="Srishti Studios Logo"
+              fill
+              className="object-contain opacity-70"
+            />
+          </div>
+          <span className="text-[10px] text-ivory/50 uppercase tracking-widest font-light">
+            Powered by Srishti Studios
+          </span>
+        </div>
+
         <span className="text-[10px] text-ivory/40 uppercase tracking-widest font-light">
           © Srishti Studios — All Rights Reserved
         </span>

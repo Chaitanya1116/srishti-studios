@@ -36,6 +36,21 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
+        {/* Studio Branding Badge */}
+        <div className="absolute top-4 left-4 z-20">
+          <div className="inline-flex items-center gap-1.5 rounded border border-gold/30 bg-charcoal/85 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-gold backdrop-blur-sm shadow-md">
+            <div className="relative h-3.5 w-10">
+              <Image
+                src="/LOGO.png"
+                alt="Srishti Studios Logo"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <span>Srishti Studio</span>
+          </div>
+        </div>
+
         {/* Status Tag */}
         <div className="absolute top-4 right-4 z-20">
           <span className="inline-flex items-center rounded border border-bronze/30 bg-charcoal/80 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-widest text-gold backdrop-blur-sm">
@@ -96,7 +111,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
               </a>
             ) : (
               <Link
-                href={`/games/${game.slug}`}
+                href={`/games/${game.slug}?play=true`}
                 className="flex items-center justify-center gap-1.5 rounded bg-gold py-2 text-[10px] uppercase font-bold tracking-widest text-charcoal hover:bg-ivory transition-all"
               >
                 Play Now <Play size={12} className="fill-current" />

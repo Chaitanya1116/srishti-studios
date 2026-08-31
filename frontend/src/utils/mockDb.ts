@@ -410,7 +410,14 @@ class ServerlessDatabase {
     }
     return this.games;
   }
-  public getGameBySlug(slug: string) { return this.getGames().find(g => g.slug === slug); }
+  public getGameBySlug(slug: string) {
+    const norm = slug.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return this.getGames().find(g => {
+      const gNorm = g.slug.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const idNorm = g.id.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return g.slug.toLowerCase() === slug.toLowerCase() || gNorm === norm || idNorm === norm || gNorm.includes(norm) || norm.includes(gNorm);
+    });
+  }
   public createGame(game: Omit<Game, 'id'>) {
     const newGame: Game = { ...game, id: `game-${Date.now()}` };
     this.games.push(newGame);

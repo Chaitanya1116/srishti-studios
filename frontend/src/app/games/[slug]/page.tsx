@@ -20,17 +20,23 @@ interface GameDetailsProps {
 export default function GameDetails({ params }: GameDetailsProps) {
   const resolvedParams = use(params);
   const { games } = useApp();
-  const slug = resolvedParams.slug?.toLowerCase();
+  const rawSlug = resolvedParams.slug || '';
+  const slug = rawSlug.toLowerCase();
+  const normSlug = slug.replace(/[^a-z0-9]/g, '');
 
-  if (slug === 'rangrush') {
+  if (normSlug.includes('rangrush') || normSlug.includes('rang-rush')) {
     return <RangRushPage />;
   }
 
-  if (slug === 'aether-forge') {
+  if (normSlug.includes('aetherforge') || normSlug.includes('aether-forge')) {
     return <AetherForgeDetails />;
   }
 
-  const game = games.find((g) => g.slug.toLowerCase() === slug);
+  const game = games.find((g) => {
+    const gNorm = g.slug.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const idNorm = g.id.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return g.slug.toLowerCase() === slug || gNorm === normSlug || idNorm === normSlug || gNorm.includes(normSlug) || normSlug.includes(gNorm);
+  });
 
   if (!game) {
     return (
