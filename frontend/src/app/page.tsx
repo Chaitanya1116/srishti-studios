@@ -160,52 +160,93 @@ export default function Home() {
         <section className="py-20 bg-gradient-to-b from-charcoal to-[#0A0A0A] relative border-t border-bronze/10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold">Premier Release</span>
-              <h2 className="text-3xl md:text-5xl font-serif font-light mt-4 text-ivory">Playable Now</h2>
+              <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold">Premier Releases</span>
+              <h2 className="text-3xl md:text-5xl font-serif font-light mt-4 text-ivory">Playable Games</h2>
               <div className="h-[1px] w-12 bg-bronze/40 mx-auto mt-4" />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center bg-forest/5 border border-bronze/10 rounded-xl overflow-hidden backdrop-blur-sm shadow-2xl">
-              {/* Cover Artwork Container */}
-              <div className="lg:col-span-7 relative aspect-video w-full overflow-hidden group border-r border-bronze/5">
-                <div className="absolute inset-0 z-10 stone-noise pointer-events-none opacity-40 mix-blend-overlay" />
-                <div className="absolute inset-0 z-10 bg-gradient-to-r from-charcoal/40 to-transparent" />
-                <Image
-                  src="/aether_forge.png"
-                  alt="Project: Aether Forge Featured Banner"
-                  fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-102"
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* RangRush Featured Card */}
+              <div className="flex flex-col bg-forest/5 border border-bronze/10 rounded-xl overflow-hidden backdrop-blur-sm shadow-2xl">
+                <div className="relative aspect-video w-full overflow-hidden group">
+                  <div className="absolute inset-0 z-10 stone-noise pointer-events-none opacity-40 mix-blend-overlay" />
+                  <div className="absolute inset-0 z-10 bg-gradient-to-t from-charcoal via-transparent to-transparent" />
+                  <Image
+                    src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop"
+                    alt="RangRush: Elements of Srishti Featured Banner"
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-102"
+                  />
+                  <div className="absolute top-4 right-4 z-20">
+                    <span className="inline-flex items-center rounded border border-gold/30 bg-charcoal/80 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gold backdrop-blur-sm">
+                      Released Game
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-8 space-y-4 flex-1 flex flex-col justify-between">
+                  <div>
+                    <span className="text-[10px] uppercase tracking-widest font-semibold text-gold">
+                      Match-3 Fantasy Puzzle
+                    </span>
+                    <h3 className="text-2xl font-serif font-light text-ivory tracking-wide mt-1">
+                      RangRush: <span className="gold-gradient-text italic font-normal">Elements of Srishti</span>
+                    </h3>
+                    <p className="text-xs text-ivory/70 leading-relaxed font-light mt-3">
+                      Command six mystical elements across 20 levels. Swap tiles, trigger cascading combos, and unleash line blasters and area bursts.
+                    </p>
+                  </div>
+
+                  <div className="flex gap-4 pt-4 border-t border-bronze/10">
+                    <Link
+                      href="/games/rangrush"
+                      className="group flex-1 flex items-center justify-center gap-2 rounded bg-gold px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-charcoal hover:bg-ivory transition-all shadow-md cursor-pointer"
+                    >
+                      Play RangRush <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
               </div>
 
-              {/* Cover Details Panel */}
-              <div className="lg:col-span-5 p-8 sm:p-12 space-y-6">
-                <span className="inline-flex items-center rounded border border-gold/30 bg-gold/5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gold">
-                  Featured Title
-                </span>
-                
-                <h3 className="text-3xl font-serif font-light text-ivory tracking-wide leading-tight">
-                  Project: <br /><span className="gold-gradient-text italic font-normal">Aether Forge</span>
-                </h3>
+              {/* Aether Forge Featured Card */}
+              <div className="flex flex-col bg-forest/5 border border-bronze/10 rounded-xl overflow-hidden backdrop-blur-sm shadow-2xl">
+                <div className="relative aspect-video w-full overflow-hidden group">
+                  <div className="absolute inset-0 z-10 stone-noise pointer-events-none opacity-40 mix-blend-overlay" />
+                  <div className="absolute inset-0 z-10 bg-gradient-to-t from-charcoal via-transparent to-transparent" />
+                  <Image
+                    src="/aether_forge.png"
+                    alt="Project: Aether Forge Featured Banner"
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-102"
+                  />
+                  <div className="absolute top-4 right-4 z-20">
+                    <span className="inline-flex items-center rounded border border-gold/30 bg-charcoal/80 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gold backdrop-blur-sm">
+                      Released Game
+                    </span>
+                  </div>
+                </div>
 
-                <p className="text-xs sm:text-sm text-ivory/70 leading-relaxed font-light">
-                  Manipulate gravity vectors, escape ancient floating structures, and activate geometric energy shrines. Play the first official mini game from Srishti Studios directly in your browser.
-                </p>
+                <div className="p-8 space-y-4 flex-1 flex flex-col justify-between">
+                  <div>
+                    <span className="text-[10px] uppercase tracking-widest font-semibold text-gold">
+                      2.5D Puzzle Action
+                    </span>
+                    <h3 className="text-2xl font-serif font-light text-ivory tracking-wide mt-1">
+                      Project: <span className="gold-gradient-text italic font-normal">Aether Forge</span>
+                    </h3>
+                    <p className="text-xs text-ivory/70 leading-relaxed font-light mt-3">
+                      Manipulate gravity vectors, escape sandstone chambers, and align multi-axis switches in floating ruins.
+                    </p>
+                  </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  <Link
-                    href="/games/aether-forge"
-                    className="group flex items-center justify-center gap-2 rounded bg-gold px-6 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-charcoal hover:bg-ivory hover:scale-[1.02] transition-all shadow-md cursor-pointer"
-                  >
-                    Play in Browser <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform cursor-pointer" />
-                  </Link>
-
-                  <Link
-                    href="/games/aether-forge"
-                    className="flex items-center justify-center gap-2 rounded border border-bronze/40 bg-transparent px-6 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-ivory hover:bg-bronze/10 transition-all cursor-pointer"
-                  >
-                    Details & Specs
-                  </Link>
+                  <div className="flex gap-4 pt-4 border-t border-bronze/10">
+                    <Link
+                      href="/games/aether-forge"
+                      className="group flex-1 flex items-center justify-center gap-2 rounded border border-gold/30 bg-gold/5 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-gold hover:bg-gold hover:text-charcoal transition-all shadow-md cursor-pointer"
+                    >
+                      Play Aether Forge <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

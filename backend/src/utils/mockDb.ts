@@ -404,8 +404,14 @@ class MockDatabase {
   }
 
   // Games
-  public getGames() { return this.games; }
-  public getGameBySlug(slug: string) { return this.games.find(g => g.slug === slug); }
+  public getGames() {
+    if (!this.games.some(g => g.slug === 'rangrush')) {
+      const rangRush = initialGames.find(g => g.slug === 'rangrush');
+      if (rangRush) this.games.unshift(rangRush);
+    }
+    return this.games;
+  }
+  public getGameBySlug(slug: string) { return this.getGames().find(g => g.slug === slug); }
   public createGame(game: Omit<Game, 'id'>) {
     const newGame: Game = { ...game, id: `game-${Date.now()}` };
     this.games.push(newGame);
