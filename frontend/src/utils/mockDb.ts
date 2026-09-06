@@ -209,6 +209,17 @@ const initialUsers: User[] = [
     status: 'ACTIVE',
     createdAt: '2026-08-15T12:00:00.000Z',
     lastLogin: '2026-09-05T18:30:00.000Z'
+  },
+  {
+    id: 'user-chaitanya-1',
+    username: 'Chaitanya Kumar',
+    email: 'potturi.chandra2023@vitstudent.ac.in',
+    // Hash of standard password
+    passwordHash: '$2a$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeg6Lruj3vjPGga31lW',
+    role: 'USER',
+    status: 'ACTIVE',
+    createdAt: '2026-09-06T20:30:00.000Z',
+    lastLogin: '2026-09-06T20:35:00.000Z'
   }
 ];
 

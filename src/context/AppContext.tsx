@@ -170,6 +170,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setUser(newUser);
     localStorage.setItem('srishti_token', newToken);
     localStorage.setItem('srishti_user', JSON.stringify(newUser));
+
+    // Persist registered player in browser local storage
+    try {
+      const existingStr = localStorage.getItem('srishti_registered_users');
+      let existingList: User[] = existingStr ? JSON.parse(existingStr) : [];
+      if (!existingList.some(u => u.email.toLowerCase() === newUser.email.toLowerCase())) {
+        existingList.push(newUser);
+        localStorage.setItem('srishti_registered_users', JSON.stringify(existingList));
+      }
+    } catch (e) {
+      console.error('Error caching registered user', e);
+    }
+
     refreshData();
   };
 
@@ -242,10 +255,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const res = await fetch(`${API_BASE}/admin/users`, {
         headers: { 'Authorization': `Bearer ${activeToken}` }
       });
+      let apiUsers: User[] = [];
       if (res.ok) {
-        const data = await res.json();
-        setUsers(data);
+        apiUsers = await res.json();
       }
+
+      // Merge with browser local registered users
+      let combined = [...apiUsers];
+      try {
+        const localUsersStr = localStorage.getItem('srishti_registered_users');
+        if (localUsersStr) {
+          const localUsers: User[] = JSON.parse(localUsersStr);
+          localUsers.forEach(lUser => {
+            if (!combined.some(u => u.email.toLowerCase() === lUser.email.toLowerCase())) {
+              combined.push(lUser);
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Error combining local users', e);
+      }
+
+      setUsers(combined);
     } catch (e) {
       console.error('Failed to fetch users', e);
     }
