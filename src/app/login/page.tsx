@@ -122,7 +122,7 @@ export default function Login() {
                         required
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        placeholder="mythrichaitu05@gmail.com or gamer_raj"
+                        placeholder="Email or Username"
                         className="bg-transparent border-none outline-none text-xs text-ivory placeholder-ivory/20 w-full"
                       />
                     </div>
@@ -161,10 +161,6 @@ export default function Login() {
                 </button>
               </form>
             )}
-
-            <div className="text-center pt-2 text-[9px] uppercase tracking-wider text-ivory/30 relative z-10 border-t border-bronze/10">
-              Admin Credential Hint: <code className="text-ivory font-mono">mythrichaitu05@gmail.com</code> / <code className="text-ivory font-mono">39553955</code>
-            </div>
           </div>
         </section>
       </PageWrapper>
