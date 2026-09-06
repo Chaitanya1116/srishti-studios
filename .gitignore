@@ -4,6 +4,7 @@ node_modules/
 /backend/node_modules/
 
 # Next.js Build Outputs
+/.next/
 /frontend/.next/
 /frontend/out/
 
@@ -28,3 +29,6 @@ node_modules/
 *.sln
 *.sw?
 Thumbs.db
+
+.vercel
+.env*

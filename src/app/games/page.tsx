@@ -14,12 +14,13 @@ export default function Games() {
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
 
-  // Guarantee RangRush is always present as a Released Game
-  const allGames = [...games];
-  const rangRushIdx = allGames.findIndex(g => g.slug === 'rangrush' || g.id === 'game-rangrush' || g.name.toLowerCase().includes('rangrush'));
-  
+  // Filter out any non-released draft/testing games for public visitors
+  const publicGames = games.filter(g => g.status === 'Released' || g.status === 'RELEASED' || g.status === 'In Production' || g.status === 'Pre-Alpha' || g.status === 'Concept');
+
+  // Guarantee RangRush is present
+  const rangRushIdx = publicGames.findIndex(g => g.slug === 'rangrush' || g.id === 'game-rangrush');
   if (rangRushIdx === -1) {
-    allGames.unshift({
+    publicGames.unshift({
       id: 'game-rangrush',
       name: 'RangRush: Elements of Srishti',
       slug: 'rangrush',
@@ -57,15 +58,14 @@ export default function Games() {
         }
       }
     });
-  } else {
-    allGames[rangRushIdx] = {
-      ...allGames[rangRushIdx],
-      status: 'Released',
-      slug: 'rangrush'
-    };
   }
 
-  const filteredGames = allGames.filter((game) => {
+  const filteredGames = publicGames.filter((game) => {
+    // Draft / non-released AI games must never appear publicly
+    if (game.status === 'DRAFT' || game.status === 'DESIGNING' || game.status === 'BUILDING' || game.status === 'TESTING' || game.status === 'READY_FOR_REVIEW') {
+      return false;
+    }
+
     const matchesSearch = game.name.toLowerCase().includes(search.toLowerCase()) || 
                           game.genre.toLowerCase().includes(search.toLowerCase());
     
@@ -74,7 +74,7 @@ export default function Games() {
     return matchesSearch && matchesFilter;
   });
 
-  const filterTabs = ['ALL', 'IN PRODUCTION', 'PRE-ALPHA', 'CONCEPT', 'RELEASED'];
+  const filterTabs = ['ALL', 'RELEASED', 'IN PRODUCTION', 'PRE-ALPHA', 'CONCEPT'];
 
   return (
     <>

@@ -12,28 +12,50 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Username and password are required' }, { status: 400 });
     }
 
-    const admin = mockDb.getAdmin();
+    // Lookup by username or email
+    const user = mockDb.getUserByUsername(username) || mockDb.getUserByEmail(username);
 
-    if (username !== admin.username) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    if (!user) {
+      return NextResponse.json({ error: 'Invalid username/email or password' }, { status: 401 });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, admin.passwordHash);
+    // Check account status
+    if (user.status === 'SUSPENDED') {
+      return NextResponse.json(
+        { error: 'Account suspended. Please contact Srishti Studios administration.' },
+        { status: 403 }
+      );
+    }
+
+    // Verify password with bcrypt
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid username/email or password' }, { status: 401 });
     }
 
-    const token = jwt.sign(
-      { username: admin.username, role: 'admin' },
-      JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    mockDb.recordLogin(user.id);
+
+    const payload = {
+      userId: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role
+    };
+
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
 
     return NextResponse.json({
       token,
-      user: { username: admin.username, role: 'admin' }
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        status: user.status
+      }
     });
   } catch (err: any) {
     return NextResponse.json({ error: 'Authentication error', details: err.message }, { status: 500 });
   }
 }
+export const dynamic = 'force-dynamic';
