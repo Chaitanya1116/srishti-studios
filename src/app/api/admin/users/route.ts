@@ -9,7 +9,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized. Admin role required.' }, { status: 403 });
   }
 
-  return NextResponse.json(mockDb.getUsers());
+  const users = await mockDb.getUsersAsync();
+  return NextResponse.json(users);
 }
 
 // PUT /api/admin/users - Update user status / role

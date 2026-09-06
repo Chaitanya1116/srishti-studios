@@ -12,6 +12,45 @@ export interface User {
   lastLogin: string;
 }
 
+const DB_OBJECT_URL = 'https://api.restful-api.dev/objects/ff808181a067127101a0774c1d8c28ff';
+
+async function fetchRemoteUsers(): Promise<User[]> {
+  try {
+    const res = await fetch(DB_OBJECT_URL, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.data?.users && Array.isArray(data.data.users)) {
+        return data.data.users;
+      }
+    }
+  } catch (e) {
+    // Ignore fetch error
+  }
+  return [];
+}
+
+async function saveRemoteUsers(users: User[]) {
+  try {
+    const sanitizedUsers = users.map(u => ({
+      id: u.id,
+      username: u.username,
+      email: u.email,
+      passwordHash: u.passwordHash,
+      role: u.role,
+      status: u.status,
+      createdAt: u.createdAt,
+      lastLogin: u.lastLogin
+    }));
+    await fetch(DB_OBJECT_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'srishti_database_v1', data: { users: sanitizedUsers } })
+    });
+  } catch (e) {
+    // Ignore save error
+  }
+}
+
 export interface ProjectFile {
   path: string;
   name: string;
@@ -392,6 +431,18 @@ class ServerlessDatabase {
     return this.users.map(u => ({ ...u, passwordHash: undefined as any })); // Omit password hash in listings
   }
 
+  public async getUsersAsync(): Promise<User[]> {
+    const remote = await fetchRemoteUsers();
+    if (remote && remote.length > 0) {
+      remote.forEach(rUser => {
+        if (!this.users.some(u => u.email.toLowerCase() === rUser.email.toLowerCase())) {
+          this.users.push(rUser);
+        }
+      });
+    }
+    return this.getUsers();
+  }
+
   public getUserByUsername(username: string): User | undefined {
     return this.users.find(u => u.username.toLowerCase() === username.toLowerCase());
   }
@@ -413,6 +464,7 @@ class ServerlessDatabase {
     };
     this.users.push(newUser);
     this.logActivity(newUser.id, newUser.username, `New account registered as ${newUser.role}`);
+    saveRemoteUsers(this.users).catch(() => {});
     return newUser;
   }
 
