@@ -3,7 +3,16 @@ import { mockDb } from '@/utils/mockDb';
 import { verifyAuth } from '@/utils/auth';
 
 export async function GET() {
-  return NextResponse.json(mockDb.getGames());
+  const allGames = mockDb.getGames();
+  const cleanGames = allGames.filter(g => g.slug !== 'symmetry-shadows-of-the-mandala' && g.id !== 'game-1');
+  
+  return NextResponse.json(cleanGames, {
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    }
+  });
 }
 
 export async function POST(req: NextRequest) {
@@ -20,4 +29,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to create game specification', details: err.message }, { status: 500 });
   }
 }
+
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
