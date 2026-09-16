@@ -27,6 +27,13 @@ export interface GameProject {
   updatedAt: string;
 }
 
+export interface ComicChapter {
+  id: string;
+  title: string;
+  pdfUrl: string;
+  description?: string;
+}
+
 export interface Game {
   id: string;
   projectId?: string;
@@ -52,6 +59,7 @@ export interface Game {
   };
   gameType?: string;
   playableCode?: string;
+  comicChapters?: ComicChapter[];
 }
 
 export interface BlogPost {

@@ -1,14 +1,14 @@
 'use client';
 
-import React, { use } from 'react';
+import React, { use, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MandalaDivider from '@/components/MandalaDivider';
 import PageWrapper from '@/components/PageWrapper';
-import { useApp } from '@/context/AppContext';
-import { ArrowLeft, Play, Cpu, Database, Monitor, Shield, Laptop, Download, Calendar, ExternalLink } from 'lucide-react';
+import { useApp, ComicChapter } from '@/context/AppContext';
+import { ArrowLeft, Play, Cpu, Monitor, Laptop, Download, ExternalLink, BookOpen, X, Film } from 'lucide-react';
 
 import RangRushPage from '../rangrush/page';
 import AetherForgeDetails from '../aether-forge/page';
@@ -20,6 +20,8 @@ interface GameDetailsProps {
 export default function GameDetails({ params }: GameDetailsProps) {
   const resolvedParams = use(params);
   const { games } = useApp();
+  const [selectedComic, setSelectedComic] = useState<ComicChapter | null>(null);
+
   const rawSlug = resolvedParams.slug || '';
   const slug = rawSlug.toLowerCase();
   const normSlug = slug.replace(/[^a-z0-9]/g, '');
@@ -55,6 +57,8 @@ export default function GameDetails({ params }: GameDetailsProps) {
       </>
     );
   }
+
+  const isVideoFile = game.trailerUrl && (game.trailerUrl.toLowerCase().includes('.mp4') || game.trailerUrl.startsWith('/'));
 
   return (
     <>
@@ -97,6 +101,35 @@ export default function GameDetails({ params }: GameDetailsProps) {
                   <span className="text-ivory/30">|</span>
                   <span>{game.platforms.join(' / ')}</span>
                 </div>
+
+                {game.trailerUrl && (
+                  <div className="mt-6 flex flex-wrap gap-4">
+                    <button
+                      onClick={() => {
+                        const el = document.getElementById('trailer');
+                        if (el) {
+                          el.scrollIntoView({ behavior: 'smooth' });
+                          const video = el.querySelector('video');
+                          if (video) video.play();
+                        }
+                      }}
+                      className="flex items-center gap-2 rounded bg-gold px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-charcoal hover:bg-ivory transition-all shadow-lg cursor-pointer"
+                    >
+                      <Play size={14} className="fill-current" /> Play Trailer Video
+                    </button>
+                    {game.comicChapters && game.comicChapters.length > 0 && (
+                      <button
+                        onClick={() => {
+                          const el = document.getElementById('comics');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        className="flex items-center gap-2 rounded border border-gold/30 bg-gold/10 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-gold hover:bg-gold hover:text-charcoal transition-all backdrop-blur-sm cursor-pointer"
+                      >
+                        <BookOpen size={14} /> Read Comic Chapters
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -232,17 +265,92 @@ export default function GameDetails({ params }: GameDetailsProps) {
           <section id="trailer" className="py-20 bg-charcoal">
             <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-12">
-                <span className="text-[10px] uppercase tracking-widest font-semibold text-gold">Cinematic</span>
+                <span className="text-[10px] uppercase tracking-widest font-semibold text-gold flex items-center justify-center gap-1.5">
+                  <Film size={14} /> Cinematic
+                </span>
                 <h3 className="text-2xl font-serif font-light text-ivory mt-2">Official Trailer</h3>
               </div>
               <div className="relative aspect-video w-full rounded-lg overflow-hidden border border-bronze/20 bg-black shadow-2xl">
-                <iframe
-                  src={game.trailerUrl}
-                  title={`${game.name} Official Trailer`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  className="absolute inset-0 h-full w-full border-none"
-                />
+                {isVideoFile ? (
+                  <video
+                    src={game.trailerUrl}
+                    controls
+                    playsInline
+                    className="w-full h-full object-contain bg-black"
+                  />
+                ) : (
+                  <iframe
+                    src={game.trailerUrl}
+                    title={`${game.name} Official Trailer`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="absolute inset-0 h-full w-full border-none"
+                  />
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Graphic Novel / Comic Chapters Section */}
+        {game.comicChapters && game.comicChapters.length > 0 && (
+          <section id="comics" className="py-20 bg-[#0c0c0c] border-t border-b border-bronze/15">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-14">
+                <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold flex items-center justify-center gap-2">
+                  <BookOpen size={14} /> Graphic Novel Series
+                </span>
+                <h3 className="text-3xl font-serif font-light text-ivory mt-2">Official Comic Chapters</h3>
+                <p className="text-xs text-ivory/60 mt-2 max-w-lg mx-auto font-light leading-relaxed">
+                  Immerse yourself in the story of {game.name}. Read illustrated comic chapters online or download the high-resolution PDFs.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                {game.comicChapters.map((chapter, idx) => (
+                  <div 
+                    key={chapter.id || idx}
+                    className="flex flex-col justify-between rounded-xl border border-bronze/20 bg-forest/10 p-6 backdrop-blur-sm shadow-xl hover:border-gold/40 transition-all group"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-[9px] uppercase font-bold tracking-widest text-gold bg-gold/10 border border-gold/20 px-2.5 py-0.5 rounded">
+                          Comic Chapter {idx + 1}
+                        </span>
+                        <BookOpen size={18} className="text-gold" />
+                      </div>
+
+                      <h4 className="text-xl font-serif text-ivory group-hover:text-gold transition-colors">
+                        {chapter.title}
+                      </h4>
+                      
+                      {chapter.description && (
+                        <p className="text-xs text-ivory/60 mt-3 font-light leading-relaxed">
+                          {chapter.description}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 pt-6 mt-6 border-t border-bronze/10">
+                      {/* Read Option */}
+                      <button
+                        onClick={() => setSelectedComic(chapter)}
+                        className="flex items-center justify-center gap-2 rounded bg-gold/10 border border-gold/30 py-2.5 text-[10px] uppercase font-bold tracking-widest text-gold hover:bg-gold hover:text-charcoal transition-all shadow-md cursor-pointer"
+                      >
+                        <BookOpen size={13} /> Read Chapter
+                      </button>
+
+                      {/* Download Option */}
+                      <a
+                        href={chapter.pdfUrl}
+                        download
+                        className="flex items-center justify-center gap-2 rounded border border-bronze/30 bg-transparent py-2.5 text-[10px] uppercase font-bold tracking-widest text-ivory hover:bg-bronze/20 hover:border-gold transition-all"
+                      >
+                        <Download size={13} /> Download PDF
+                      </a>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -319,6 +427,49 @@ export default function GameDetails({ params }: GameDetailsProps) {
             </div>
           </div>
         </section>
+
+        {/* PDF Reader Modal */}
+        {selectedComic && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 sm:p-6 backdrop-blur-md">
+            <div className="relative flex flex-col w-full max-w-5xl h-[90vh] bg-charcoal border border-bronze/30 rounded-xl overflow-hidden shadow-2xl">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-bronze/20 bg-[#0C0C0C]">
+                <div className="flex items-center gap-3">
+                  <BookOpen className="text-gold" size={20} />
+                  <div>
+                    <h3 className="text-sm font-serif font-medium text-ivory">{selectedComic.title}</h3>
+                    <p className="text-[10px] text-ivory/50">Reading Official Comic Book PDF</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <a
+                    href={selectedComic.pdfUrl}
+                    download
+                    className="flex items-center gap-1.5 rounded border border-gold/30 bg-gold/10 px-3 py-1.5 text-[10px] uppercase font-bold tracking-widest text-gold hover:bg-gold hover:text-charcoal transition-all"
+                  >
+                    <Download size={12} /> Download PDF
+                  </a>
+                  <button
+                    onClick={() => setSelectedComic(null)}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-ivory/20 text-ivory/70 hover:text-white hover:border-ivory transition-colors cursor-pointer"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </div>
+
+              {/* PDF Reader Frame */}
+              <div className="flex-1 bg-[#1A1A1A] relative">
+                <iframe
+                  src={`${selectedComic.pdfUrl}#toolbar=1&view=FitH`}
+                  className="w-full h-full border-none"
+                  title={selectedComic.title}
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         <MandalaDivider />
       </PageWrapper>

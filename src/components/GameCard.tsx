@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Game } from '@/context/AppContext';
-import { Play, Heart, Download, ExternalLink } from 'lucide-react';
+import { Play, Heart, Download, ExternalLink, BookOpen } from 'lucide-react';
 
 interface GameCardProps {
   game: Game;
@@ -51,8 +51,13 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
           </div>
         </div>
 
-        {/* Status Tag */}
-        <div className="absolute top-4 right-4 z-20">
+        {/* Status Tag & Comic Badge */}
+        <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5">
+          {game.comicChapters && game.comicChapters.length > 0 && (
+            <span className="inline-flex items-center gap-1 rounded border border-gold/40 bg-charcoal/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-gold backdrop-blur-sm shadow-md">
+              <BookOpen size={10} /> Comic
+            </span>
+          )}
           <span className="inline-flex items-center rounded border border-bronze/30 bg-charcoal/80 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-widest text-gold backdrop-blur-sm">
             {game.status}
           </span>
