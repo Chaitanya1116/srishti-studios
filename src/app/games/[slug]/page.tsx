@@ -8,7 +8,7 @@ import Footer from '@/components/Footer';
 import MandalaDivider from '@/components/MandalaDivider';
 import PageWrapper from '@/components/PageWrapper';
 import { useApp, ComicChapter } from '@/context/AppContext';
-import { ArrowLeft, Play, Cpu, Monitor, Laptop, Download, ExternalLink, BookOpen, X, Film } from 'lucide-react';
+import { ArrowLeft, Play, Cpu, Monitor, Laptop, Download, ExternalLink, BookOpen, X, Film, Eye } from 'lucide-react';
 
 import RangRushPage from '../rangrush/page';
 import AetherForgeDetails from '../aether-forge/page';
@@ -300,9 +300,9 @@ export default function GameDetails({ params }: GameDetailsProps) {
                 <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold flex items-center justify-center gap-2">
                   <BookOpen size={14} /> Graphic Novel Series
                 </span>
-                <h3 className="text-3xl font-serif font-light text-ivory mt-2">Official Comic Chapters</h3>
+                <h3 className="text-3xl font-serif font-light text-ivory mt-2">Official Released Comic Chapters</h3>
                 <p className="text-xs text-ivory/60 mt-2 max-w-lg mx-auto font-light leading-relaxed">
-                  Immerse yourself in the story of {game.name}. Read illustrated comic chapters online or download the high-resolution PDFs.
+                  Explore the 2 released comic chapters of {game.name}. Click to view and read online.
                 </p>
               </div>
 
@@ -315,7 +315,7 @@ export default function GameDetails({ params }: GameDetailsProps) {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-[9px] uppercase font-bold tracking-widest text-gold bg-gold/10 border border-gold/20 px-2.5 py-0.5 rounded">
-                          Comic Chapter {idx + 1}
+                          Released Chapter {idx + 1}
                         </span>
                         <BookOpen size={18} className="text-gold" />
                       </div>
@@ -331,23 +331,14 @@ export default function GameDetails({ params }: GameDetailsProps) {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 pt-6 mt-6 border-t border-bronze/10">
-                      {/* Read Option */}
+                    <div className="pt-6 mt-6 border-t border-bronze/10">
+                      {/* View / Read Option ONLY */}
                       <button
                         onClick={() => setSelectedComic(chapter)}
-                        className="flex items-center justify-center gap-2 rounded bg-gold/10 border border-gold/30 py-2.5 text-[10px] uppercase font-bold tracking-widest text-gold hover:bg-gold hover:text-charcoal transition-all shadow-md cursor-pointer"
+                        className="w-full flex items-center justify-center gap-2 rounded bg-gold py-3 text-xs uppercase font-bold tracking-widest text-charcoal hover:bg-ivory transition-all shadow-md cursor-pointer"
                       >
-                        <BookOpen size={13} /> Read Chapter
+                        <Eye size={14} /> View & Read Chapter {idx + 1}
                       </button>
-
-                      {/* Download Option */}
-                      <a
-                        href={chapter.pdfUrl}
-                        download
-                        className="flex items-center justify-center gap-2 rounded border border-bronze/30 bg-transparent py-2.5 text-[10px] uppercase font-bold tracking-widest text-ivory hover:bg-bronze/20 hover:border-gold transition-all"
-                      >
-                        <Download size={13} /> Download PDF
-                      </a>
                     </div>
                   </div>
                 ))}
@@ -428,41 +419,33 @@ export default function GameDetails({ params }: GameDetailsProps) {
           </div>
         </section>
 
-        {/* PDF Reader Modal */}
+        {/* PDF Reader Modal (View / Read Only) */}
         {selectedComic && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 sm:p-6 backdrop-blur-md">
             <div className="relative flex flex-col w-full max-w-5xl h-[90vh] bg-charcoal border border-bronze/30 rounded-xl overflow-hidden shadow-2xl">
-              {/* Modal Header */}
+              {/* Modal Header - View Mode Only */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-bronze/20 bg-[#0C0C0C]">
                 <div className="flex items-center gap-3">
                   <BookOpen className="text-gold" size={20} />
                   <div>
                     <h3 className="text-sm font-serif font-medium text-ivory">{selectedComic.title}</h3>
-                    <p className="text-[10px] text-ivory/50">Reading Official Comic Book PDF</p>
+                    <p className="text-[10px] text-gold uppercase font-semibold tracking-wider">Online Comic Book Reader</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-3">
-                  <a
-                    href={selectedComic.pdfUrl}
-                    download
-                    className="flex items-center gap-1.5 rounded border border-gold/30 bg-gold/10 px-3 py-1.5 text-[10px] uppercase font-bold tracking-widest text-gold hover:bg-gold hover:text-charcoal transition-all"
-                  >
-                    <Download size={12} /> Download PDF
-                  </a>
-                  <button
-                    onClick={() => setSelectedComic(null)}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-ivory/20 text-ivory/70 hover:text-white hover:border-ivory transition-colors cursor-pointer"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
+                <button
+                  onClick={() => setSelectedComic(null)}
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-ivory/20 text-ivory/70 hover:text-white hover:border-ivory transition-colors cursor-pointer"
+                  title="Close Reader"
+                >
+                  <X size={16} />
+                </button>
               </div>
 
               {/* PDF Reader Frame */}
               <div className="flex-1 bg-[#1A1A1A] relative">
                 <iframe
-                  src={`${selectedComic.pdfUrl}#toolbar=1&view=FitH`}
+                  src={`${selectedComic.pdfUrl}#toolbar=0&navpanes=0&view=FitH`}
                   className="w-full h-full border-none"
                   title={selectedComic.title}
                 />

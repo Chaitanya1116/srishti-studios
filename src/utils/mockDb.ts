@@ -354,41 +354,16 @@ const initialGames: Game[] = [
     gameType: 'puzzle-action'
   },
   {
-    id: 'game-1',
-    name: 'Symmetry: Shadows of the Mandala',
-    slug: 'symmetry-shadows-of-the-mandala',
-    genre: 'Cinematic Action RPG',
-    platforms: ['PC', 'PS5', 'Xbox Series X'],
-    description: 'An atmospheric action-adventure where geometric architecture shapes reality. Uncover an ancient civilization built on bronze, stone, and symmetric forces.',
-    story: 'In a world where geometry is the language of creation, players control a lone craftsman who can manipulate stone architecture by resolving structural symmetry.',
-    features: [
-      'Architectural Puzzle Mechanics: Shape and shift sandstone ruins to open paths and bypass hazards.',
-      'Symmetric Combat: Master a fluid swordplay system based on stance balance and rhythmic counter-strikes.',
-      'Premium AAA Visuals: Photorealistic stone textures, brushed bronze weaponry, and atmospheric volumetric lighting.'
-    ],
-    status: 'In Production',
-    artworkUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
-    screenshots: [
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop'
-    ],
-    trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    downloadLinks: { steam: 'https://store.steampowered.com' },
-    systemRequirements: {
-      minimum: { os: 'Windows 10 64-bit', processor: 'Intel Core i5-8400', memory: '12 GB RAM', graphics: 'NVIDIA GeForce GTX 1070', storage: '60 GB' },
-      recommended: { os: 'Windows 11 64-bit', processor: 'Intel Core i7-10700K', memory: '16 GB RAM', graphics: 'NVIDIA GeForce RTX 3070', storage: '60 GB SSD' }
-    }
-  },
-  {
     id: 'game-kage-no-koe',
     name: 'Kage No Koe: The Voice of the Shadow',
     slug: 'kage-no-koe',
     genre: 'Cinematic Dark Fantasy & Graphic Novel',
     platforms: ['PC', 'PS5', 'Xbox Series X'],
     description: 'Enter the shadow realm in this dark cinematic saga. Accompanied by official illustrated comic book chapters and high-definition cinematic trailer video.',
-    story: 'In a forgotten age where shadows gained consciousness and dark forces awakened, Kage No Koe (The Voice of the Shadow) follows a spectral warrior fighting through ruined sanctuaries. Uncover the epic lore across interactive gameplay and exclusive 40-page illustrated graphic novel comic chapters.',
+    story: 'In a forgotten age where shadows gained consciousness and dark forces awakened, Kage No Koe (The Voice of the Shadow) follows a spectral warrior fighting through ruined sanctuaries. Uncover the epic lore across interactive gameplay and exclusive illustrated graphic novel comic chapters.',
     features: [
       'Cinematic Shadow Combat: Manipulate dark energy vectors and execute fluid stance counter-attacks.',
-      'Official Graphic Novel Chapters: Includes Chapter 1 and Chapter 2 with built-in PDF reader and direct download options.',
+      'Official Graphic Novel Chapters: Includes Chapter 1 and Chapter 2 with built-in online PDF reader view.',
       'High-Definition Official Trailer: Watch the official cinematic trailer video directly inside Srishti Studios.'
     ],
     status: 'In Production',
