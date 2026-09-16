@@ -15,7 +15,10 @@ export default function Games() {
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
 
   // Filter out any non-released draft/testing games for public visitors
-  let publicGames = games.filter(g => g.status === 'Released' || g.status === 'RELEASED' || g.status === 'In Production' || g.status === 'Pre-Alpha' || g.status === 'Concept');
+  let publicGames = games.filter(g => {
+    const st = (g.status || '').toUpperCase();
+    return st === 'RELEASED' || st.includes('PRODUCTION') || st.includes('DEVELOPMENT') || st.includes('PRE') || st.includes('CONCEPT');
+  });
 
   // Explicitly remove legacy Symmetry game if present
   publicGames = publicGames.filter(g => g.slug !== 'symmetry-shadows-of-the-mandala' && g.id !== 'game-1');
@@ -63,20 +66,21 @@ export default function Games() {
     });
   }
 
-  // Guarantee Kage No Koe is present as the IN PRODUCTION game
-  const kageNoKoeIdx = publicGames.findIndex(g => g.slug === 'kage-no-koe' || g.id === 'game-kage-no-koe');
+  // Guarantee Kage No Koe is present as the IN PRODUCTION original game
+  const kageNoKoeIdx = publicGames.findIndex(g => g.slug === 'kage-no-koe' || g.id === 'game-kage-no-koe' || g.name.toLowerCase().includes('kage'));
   const kageNoKoeData = {
     id: 'game-kage-no-koe',
-    name: 'Kage No Koe: The Voice of the Shadow',
+    name: 'KAGE NO KOE — 影の声',
     slug: 'kage-no-koe',
-    genre: 'Cinematic Dark Fantasy & Graphic Novel',
+    genre: 'Historical Samurai Mystery • Psychological Horror',
     platforms: ['PC', 'PS5', 'Xbox Series X'],
-    description: 'Enter the shadow realm in this dark cinematic saga. Accompanied by official illustrated comic book chapters and high-definition cinematic trailer video.',
-    story: 'In a forgotten age where shadows gained consciousness and dark forces awakened, Kage No Koe (The Voice of the Shadow) follows a spectral warrior fighting through ruined sanctuaries. Uncover the epic lore across interactive gameplay and exclusive illustrated graphic novel comic chapters.',
+    description: 'A historical-feeling samurai mystery set in a remote Japanese mountain region where silence is used to contain something that can imitate the voices of the dead. Renjiro Kazehara, a wandering former samurai, becomes involved in the mystery and discovers that Kagamori is only the beginning of a much larger mystery involving seven mountains.',
+    story: 'Kagamori is a remote mountain village where silence is required after the temple bell rings at sunset. Something beneath the mountain can hear voices and imitate the dead. Renjiro Kazehara, a wandering former samurai, becomes involved in the mystery and discovers that Kagamori is only one part of a much larger mystery involving seven mountains. Chapter II expands the mystery beyond Kagamori and introduces Akari, the mysterious Nameless Monk, the Seven Mountains, and the revelation that the seventh symbol may represent a door rather than a prison.',
     features: [
-      'Cinematic Shadow Combat: Manipulate dark energy vectors and execute fluid stance counter-attacks.',
-      'Official Graphic Novel Chapters: Includes Chapter 1 and Chapter 2 with built-in online PDF reader view.',
-      'High-Definition Official Trailer: Watch the official cinematic trailer video directly inside Srishti Studios.'
+      'Historical Samurai Mystery & Psychological Horror: Uncover ancient mountain curses and vocal mimicry abominations beneath Kagamori.',
+      'Cinematic Shadow Stance Combat: Manipulate dark energy vectors and execute fluid samurai counter-strikes.',
+      'Official Illustrated Graphic Novel Series: Includes Chapter I (The Voice of the Shadow) and Chapter II (The Mountain Beyond — 山の向こう) with online PDF reader.',
+      'Atmospheric Original Soundscape: High-definition cinematic audio and official studio trailer video.'
     ],
     status: 'In Production' as const,
     artworkUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=1200&auto=format&fit=crop',
@@ -93,15 +97,15 @@ export default function Games() {
     comicChapters: [
       {
         id: 'ch-1',
-        title: 'Chapter 1: The Voice of the Shadow',
+        title: 'CHAPTER I — THE VOICE OF THE SHADOW',
         pdfUrl: '/Kage No Koe_Chapter 1.pdf',
-        description: 'Illustrated 40-Page Graphic Novel - Chapter 1'
+        description: 'Illustrated Graphic Novel — Chapter 1: The Silence of Kagamori'
       },
       {
         id: 'ch-2',
-        title: 'Chapter 2: The Voice of the Shadow',
+        title: 'CHAPTER II — THE MOUNTAIN BEYOND (山の向こう)',
         pdfUrl: '/Kage No Koe_Chapter 2.pdf',
-        description: 'Illustrated Graphic Novel - Chapter 2'
+        description: 'Illustrated Graphic Novel — Chapter 2: The Nameless Monk and the Seven Seals'
       }
     ]
   };
@@ -122,9 +126,13 @@ export default function Games() {
     }
 
     const matchesSearch = game.name.toLowerCase().includes(search.toLowerCase()) || 
-                          game.genre.toLowerCase().includes(search.toLowerCase());
+                          game.genre.toLowerCase().includes(search.toLowerCase()) ||
+                          game.description.toLowerCase().includes(search.toLowerCase());
     
-    const matchesFilter = filterStatus === 'ALL' || game.status.toUpperCase() === filterStatus;
+    const statusUpper = game.status.toUpperCase();
+    const matchesFilter = filterStatus === 'ALL' || 
+                          statusUpper === filterStatus || 
+                          (filterStatus === 'IN PRODUCTION' && (statusUpper.includes('PRODUCTION') || statusUpper.includes('DEVELOPMENT')));
     
     return matchesSearch && matchesFilter;
   });
