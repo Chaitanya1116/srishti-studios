@@ -14,12 +14,16 @@ export default function Games() {
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
 
-  // Guarantee RangRush is always present as a Released Game
-  const allGames = [...games];
-  const rangRushIdx = allGames.findIndex(g => g.slug === 'rangrush' || g.id === 'game-rangrush' || g.name.toLowerCase().includes('rangrush'));
-  
+  // Filter out any non-released draft/testing games for public visitors
+  let publicGames = games.filter(g => g.status === 'Released' || g.status === 'RELEASED' || g.status === 'In Production' || g.status === 'Pre-Alpha' || g.status === 'Concept');
+
+  // Explicitly remove legacy Symmetry game if present
+  publicGames = publicGames.filter(g => g.slug !== 'symmetry-shadows-of-the-mandala' && g.id !== 'game-1');
+
+  // Guarantee RangRush is present
+  const rangRushIdx = publicGames.findIndex(g => g.slug === 'rangrush' || g.id === 'game-rangrush');
   if (rangRushIdx === -1) {
-    allGames.unshift({
+    publicGames.unshift({
       id: 'game-rangrush',
       name: 'RangRush: Elements of Srishti',
       slug: 'rangrush',
@@ -57,15 +61,66 @@ export default function Games() {
         }
       }
     });
+  }
+
+  // Guarantee Kage No Koe is present as the IN PRODUCTION game
+  const kageNoKoeIdx = publicGames.findIndex(g => g.slug === 'kage-no-koe' || g.id === 'game-kage-no-koe');
+  const kageNoKoeData = {
+    id: 'game-kage-no-koe',
+    name: 'Kage No Koe: The Voice of the Shadow',
+    slug: 'kage-no-koe',
+    genre: 'Cinematic Dark Fantasy & Graphic Novel',
+    platforms: ['PC', 'PS5', 'Xbox Series X'],
+    description: 'Enter the shadow realm in this dark cinematic saga. Accompanied by official illustrated comic book chapters and high-definition cinematic trailer video.',
+    story: 'In a forgotten age where shadows gained consciousness and dark forces awakened, Kage No Koe (The Voice of the Shadow) follows a spectral warrior fighting through ruined sanctuaries. Uncover the epic lore across interactive gameplay and exclusive illustrated graphic novel comic chapters.',
+    features: [
+      'Cinematic Shadow Combat: Manipulate dark energy vectors and execute fluid stance counter-attacks.',
+      'Official Graphic Novel Chapters: Includes Chapter 1 and Chapter 2 with built-in online PDF reader view.',
+      'High-Definition Official Trailer: Watch the official cinematic trailer video directly inside Srishti Studios.'
+    ],
+    status: 'In Production' as const,
+    artworkUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=1200&auto=format&fit=crop',
+    screenshots: [
+      'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop'
+    ],
+    trailerUrl: '/Kage No Koe Trailer.mp4',
+    downloadLinks: { steam: 'https://store.steampowered.com' },
+    systemRequirements: {
+      minimum: { os: 'Windows 10 64-bit', processor: 'Intel Core i5-9400F', memory: '16 GB RAM', graphics: 'NVIDIA GeForce GTX 1660 Super', storage: '50 GB SSD' },
+      recommended: { os: 'Windows 11 64-bit', processor: 'Intel Core i7-12700K', memory: '32 GB RAM', graphics: 'NVIDIA GeForce RTX 4070', storage: '50 GB NVMe SSD' }
+    },
+    comicChapters: [
+      {
+        id: 'ch-1',
+        title: 'Chapter 1: The Voice of the Shadow',
+        pdfUrl: '/Kage No Koe_Chapter 1.pdf',
+        description: 'Illustrated 40-Page Graphic Novel - Chapter 1'
+      },
+      {
+        id: 'ch-2',
+        title: 'Chapter 2: The Voice of the Shadow',
+        pdfUrl: '/Kage No Koe_Chapter 2.pdf',
+        description: 'Illustrated Graphic Novel - Chapter 2'
+      }
+    ]
+  };
+
+  if (kageNoKoeIdx === -1) {
+    publicGames.push(kageNoKoeData);
   } else {
-    allGames[rangRushIdx] = {
-      ...allGames[rangRushIdx],
-      status: 'Released',
-      slug: 'rangrush'
+    publicGames[kageNoKoeIdx] = {
+      ...publicGames[kageNoKoeIdx],
+      ...kageNoKoeData
     };
   }
 
-  const filteredGames = allGames.filter((game) => {
+  const filteredGames = publicGames.filter((game) => {
+    // Draft / non-released AI games must never appear publicly
+    if (game.status === 'DRAFT' || game.status === 'DESIGNING' || game.status === 'BUILDING' || game.status === 'TESTING' || game.status === 'READY_FOR_REVIEW') {
+      return false;
+    }
+
     const matchesSearch = game.name.toLowerCase().includes(search.toLowerCase()) || 
                           game.genre.toLowerCase().includes(search.toLowerCase());
     
@@ -74,7 +129,7 @@ export default function Games() {
     return matchesSearch && matchesFilter;
   });
 
-  const filterTabs = ['ALL', 'IN PRODUCTION', 'PRE-ALPHA', 'CONCEPT', 'RELEASED'];
+  const filterTabs = ['ALL', 'RELEASED', 'IN PRODUCTION', 'PRE-ALPHA', 'CONCEPT'];
 
   return (
     <>
@@ -104,7 +159,7 @@ export default function Games() {
                   <button
                     key={tab}
                     onClick={() => setFilterStatus(tab)}
-                    className={`rounded px-4 py-2 text-[10px] uppercase font-bold tracking-widest transition-all ${
+                    className={`rounded px-4 py-2 text-[10px] uppercase font-bold tracking-widest transition-all cursor-pointer ${
                       filterStatus === tab
                         ? 'bg-gold text-charcoal shadow-md'
                         : 'border border-bronze/20 text-ivory/80 hover:border-bronze hover:text-white'
