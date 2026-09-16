@@ -205,14 +205,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setLoading(true);
     try {
       const [gamesRes, newsRes, careersRes] = await Promise.all([
-        fetch(`${API_BASE}/games`),
-        fetch(`${API_BASE}/news`),
-        fetch(`${API_BASE}/careers`)
+        fetch(`${API_BASE}/games?t=${Date.now()}`, { cache: 'no-store' }),
+        fetch(`${API_BASE}/news?t=${Date.now()}`, { cache: 'no-store' }),
+        fetch(`${API_BASE}/careers?t=${Date.now()}`, { cache: 'no-store' })
       ]);
 
       if (gamesRes.ok) {
         const gamesData = await gamesRes.json();
-        setGames(gamesData);
+        const cleanGames = Array.isArray(gamesData) 
+          ? gamesData.filter((g: any) => g.slug !== 'symmetry-shadows-of-the-mandala' && g.id !== 'game-1')
+          : [];
+        setGames(cleanGames);
       }
       if (newsRes.ok) {
         const newsData = await newsRes.json();
