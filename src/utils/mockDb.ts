@@ -645,7 +645,10 @@ class ServerlessDatabase {
 
   // --- GAMES ---
   public getGames(): Game[] {
-    // Only return games that are Released for public views, but preserve all in internal memory
+    // Purge old legacy Symmetry game from memory if present
+    this.games = this.games.filter(g => g.slug !== 'symmetry-shadows-of-the-mandala' && g.id !== 'game-1');
+
+    // Guarantee RangRush is present
     const rangRush = initialGames[0];
     const idx = this.games.findIndex(g => g.slug === 'rangrush' || g.id === 'game-rangrush');
     if (idx === -1) {
@@ -653,6 +656,18 @@ class ServerlessDatabase {
     } else {
       this.games[idx] = { ...rangRush, ...this.games[idx], status: 'Released', slug: 'rangrush' };
     }
+
+    // Guarantee Kage No Koe is present as In Production
+    const kageNoKoe = initialGames.find(g => g.slug === 'kage-no-koe');
+    if (kageNoKoe) {
+      const kIdx = this.games.findIndex(g => g.slug === 'kage-no-koe' || g.id === 'game-kage-no-koe');
+      if (kIdx === -1) {
+        this.games.push(kageNoKoe);
+      } else {
+        this.games[kIdx] = kageNoKoe;
+      }
+    }
+
     return this.games;
   }
 

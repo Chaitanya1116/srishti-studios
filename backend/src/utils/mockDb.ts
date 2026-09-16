@@ -149,27 +149,25 @@ const initialGames: Game[] = [
     }
   },
   {
-    id: 'game-1',
-    name: 'Symmetry: Shadows of the Mandala',
-    slug: 'symmetry-shadows-of-the-mandala',
-    genre: 'Cinematic Action RPG',
+    id: 'game-kage-no-koe',
+    name: 'Kage No Koe: The Voice of the Shadow',
+    slug: 'kage-no-koe',
+    genre: 'Cinematic Dark Fantasy & Graphic Novel',
     platforms: ['PC', 'PS5', 'Xbox Series X'],
-    description: 'An atmospheric action-adventure where geometric architecture shapes reality. Uncover an ancient civilization built on bronze, stone, and symmetric forces.',
-    story: 'In a world where geometry is the language of creation, players control a lone craftsman who can manipulate stone architecture by resolving structural symmetry. As the shadows lengthen, ancient mechanical entities guard the secrets of the Great Mandala, a cosmic blueprint of the universe. The game blends high-fidelity sword combat with environmental manipulation using physical and architectural puzzles.',
+    description: 'Enter the shadow realm in this dark cinematic saga. Accompanied by official illustrated comic book chapters and high-definition cinematic trailer video.',
+    story: 'In a forgotten age where shadows gained consciousness and dark forces awakened, Kage No Koe (The Voice of the Shadow) follows a spectral warrior fighting through ruined sanctuaries. Uncover the epic lore across interactive gameplay and exclusive illustrated graphic novel comic chapters.',
     features: [
-      'Architectural Puzzle Mechanics: Shape and shift sandstone ruins to open paths and bypass hazards.',
-      'Symmetric Combat: Master a fluid swordplay system based on stance balance and rhythmic counter-strikes.',
-      'Premium AAA Visuals: Photorealistic stone textures, brushed bronze weaponry, and atmospheric volumetric lighting.',
-      'Original Indian Orchestral Score: Atmospheric fusion of classical Indian strings (Sitar, Esraj) with deep cinematic sub-bass.'
+      'Cinematic Shadow Combat: Manipulate dark energy vectors and execute fluid stance counter-attacks.',
+      'Official Graphic Novel Chapters: Includes Chapter 1 and Chapter 2 with built-in online PDF reader view.',
+      'High-Definition Official Trailer: Watch the official cinematic trailer video directly inside Srishti Studios.'
     ],
     status: 'In Production',
-    artworkUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+    artworkUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=1200&auto=format&fit=crop',
     screenshots: [
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop'
     ],
-    trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder trailer
+    trailerUrl: '/Kage No Koe Trailer.mp4',
     downloadLinks: {
       steam: 'https://store.steampowered.com',
       epic: 'https://store.epicgames.com'
@@ -177,17 +175,17 @@ const initialGames: Game[] = [
     systemRequirements: {
       minimum: {
         os: 'Windows 10 64-bit',
-        processor: 'Intel Core i5-8400 or AMD Ryzen 5 2600',
-        memory: '12 GB RAM',
-        graphics: 'NVIDIA GeForce GTX 1070 or AMD Radeon RX 590',
-        storage: '60 GB available space'
+        processor: 'Intel Core i5-9400F',
+        memory: '16 GB RAM',
+        graphics: 'NVIDIA GeForce GTX 1660 Super',
+        storage: '50 GB SSD'
       },
       recommended: {
         os: 'Windows 11 64-bit',
-        processor: 'Intel Core i7-10700K or AMD Ryzen 7 3700X',
-        memory: '16 GB RAM',
-        graphics: 'NVIDIA GeForce RTX 3070 or AMD Radeon RX 6800 XT',
-        storage: '60 GB SSD storage'
+        processor: 'Intel Core i7-12700K',
+        memory: '32 GB RAM',
+        graphics: 'NVIDIA GeForce RTX 4070',
+        storage: '50 GB NVMe SSD'
       }
     }
   },
