@@ -12,6 +12,7 @@ import { ArrowLeft, Play, Cpu, Monitor, Laptop, Download, ExternalLink, BookOpen
 
 import RangRushPage from '../rangrush/page';
 import AetherForgeDetails from '../aether-forge/page';
+import KageNoKoeDetails from '@/components/KageNoKoeDetails';
 
 interface GameDetailsProps {
   params: Promise<{ slug: string }>;
@@ -22,7 +23,7 @@ export default function GameDetails({ params }: GameDetailsProps) {
   const { games } = useApp();
   const [selectedComic, setSelectedComic] = useState<ComicChapter | null>(null);
 
-  const rawSlug = resolvedParams.slug || '';
+  const rawSlug = resolvedParams?.slug || '';
   const slug = rawSlug.toLowerCase();
   const normSlug = slug.replace(/[^a-z0-9]/g, '');
 
@@ -32,6 +33,10 @@ export default function GameDetails({ params }: GameDetailsProps) {
 
   if (normSlug.includes('aetherforge') || normSlug.includes('aether-forge')) {
     return <AetherForgeDetails />;
+  }
+
+  if (normSlug.includes('kage') || normSlug.includes('koe') || normSlug.includes('shadow') || normSlug.includes('ko')) {
+    return <KageNoKoeDetails />;
   }
 
   const kageNoKoeData = {
