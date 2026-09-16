@@ -36,16 +36,17 @@ export default function GameDetails({ params }: GameDetailsProps) {
 
   const kageNoKoeData = {
     id: 'game-kage-no-koe',
-    name: 'Kage No Koe: The Voice of the Shadow',
+    name: 'Kage No Koe: The Voice of the Shadow (影の声)',
     slug: 'kage-no-koe',
-    genre: 'Cinematic Dark Fantasy & Graphic Novel',
+    genre: 'Historical Samurai Mystery • Psychological Horror',
     platforms: ['PC', 'PS5', 'Xbox Series X'],
-    description: 'Enter the shadow realm in this dark cinematic saga. Accompanied by official illustrated comic book chapters and high-definition cinematic trailer video.',
-    story: 'In a forgotten age where shadows gained consciousness and dark forces awakened, Kage No Koe (The Voice of the Shadow) follows a spectral warrior fighting through ruined sanctuaries. Uncover the epic lore across interactive gameplay and exclusive illustrated graphic novel comic chapters.',
+    description: 'Enter the shadow realm in this dark cinematic saga. Kagamori is a remote mountain village where silence is required after the temple bell rings at sunset. Something beneath the mountain can hear voices and imitate the dead.',
+    story: 'Kagamori is a remote mountain village where silence is required after the temple bell rings at sunset. Something beneath the mountain can hear voices and imitate the dead. Renjiro Kazehara, a wandering former samurai, becomes involved in the mystery and discovers that Kagamori is only one part of a much larger mystery involving seven mountains. Chapter II expands the mystery beyond Kagamori and introduces Akari, the mysterious Nameless Monk, the Seven Mountains, and the revelation that the seventh symbol may represent a door rather than a prison.',
     features: [
-      'Cinematic Shadow Combat: Manipulate dark energy vectors and execute fluid stance counter-attacks.',
-      'Official Graphic Novel Chapters: Includes Chapter 1 and Chapter 2 with built-in online PDF reader view.',
-      'High-Definition Official Trailer: Watch the official cinematic trailer video directly inside Srishti Studios.'
+      'Historical Samurai Mystery & Psychological Horror: Uncover ancient mountain curses and vocal mimicry abominations beneath Kagamori.',
+      'Cinematic Shadow Stance Combat: Manipulate dark energy vectors and execute fluid samurai counter-strikes.',
+      'Official Illustrated Graphic Novel Series: Includes Chapter I (The Voice of the Shadow) and Chapter II (The Mountain Beyond — 山の向こう) with online PDF reader.',
+      'Atmospheric Original Soundscape: High-definition cinematic audio and official studio trailer video.'
     ],
     status: 'In Production' as const,
     artworkUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=1200&auto=format&fit=crop',
@@ -62,15 +63,15 @@ export default function GameDetails({ params }: GameDetailsProps) {
     comicChapters: [
       {
         id: 'ch-1',
-        title: 'Chapter 1: The Voice of the Shadow',
+        title: 'CHAPTER I — THE VOICE OF THE SHADOW',
         pdfUrl: '/Kage No Koe_Chapter 1.pdf',
-        description: 'Illustrated 40-Page Graphic Novel - Chapter 1'
+        description: 'Illustrated Graphic Novel — Chapter 1: The Silence of Kagamori'
       },
       {
         id: 'ch-2',
-        title: 'Chapter 2: The Voice of the Shadow',
+        title: 'CHAPTER II — THE MOUNTAIN BEYOND (山の向こう)',
         pdfUrl: '/Kage No Koe_Chapter 2.pdf',
-        description: 'Illustrated Graphic Novel - Chapter 2'
+        description: 'Illustrated Graphic Novel — Chapter 2: The Nameless Monk and the Seven Seals'
       }
     ]
   };
@@ -147,8 +148,8 @@ export default function GameDetails({ params }: GameDetailsProps) {
                   <span>{game.platforms.join(' / ')}</span>
                 </div>
 
-                {game.trailerUrl && (
-                  <div className="mt-6 flex flex-wrap gap-4">
+                <div className="mt-6 flex flex-wrap gap-4">
+                  {game.trailerUrl && (
                     <button
                       onClick={() => {
                         const el = document.getElementById('trailer');
@@ -160,21 +161,19 @@ export default function GameDetails({ params }: GameDetailsProps) {
                       }}
                       className="flex items-center gap-2 rounded bg-gold px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-charcoal hover:bg-ivory transition-all shadow-lg cursor-pointer"
                     >
-                      <Play size={14} className="fill-current" /> Play Trailer Video
+                      <Play size={14} className="fill-current" /> Watch Trailer
                     </button>
-                    {game.comicChapters && game.comicChapters.length > 0 && (
-                      <button
-                        onClick={() => {
-                          const el = document.getElementById('comics');
-                          if (el) el.scrollIntoView({ behavior: 'smooth' });
-                        }}
-                        className="flex items-center gap-2 rounded border border-gold/30 bg-gold/10 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-gold hover:bg-gold hover:text-charcoal transition-all backdrop-blur-sm cursor-pointer"
-                      >
-                        <BookOpen size={14} /> Read Comic Chapters
-                      </button>
-                    )}
-                  </div>
-                )}
+                  )}
+                  {game.comicChapters && game.comicChapters.map((chapter, idx) => (
+                    <button
+                      key={chapter.id || idx}
+                      onClick={() => setSelectedComic(chapter)}
+                      className="flex items-center gap-2 rounded border border-gold/40 bg-gold/10 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-gold hover:bg-gold hover:text-charcoal transition-all backdrop-blur-sm cursor-pointer shadow-md"
+                    >
+                      <BookOpen size={14} /> Read Chapter {idx === 0 ? 'I' : idx === 1 ? 'II' : idx + 1}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
