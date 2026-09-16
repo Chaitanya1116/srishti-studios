@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import { NextRequest, NextResponse } from 'next/server';
 import { mockDb } from '@/utils/mockDb';
 import { verifyAuth } from '@/utils/auth';
@@ -72,6 +75,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to create game specification', details: err.message }, { status: 500 });
   }
 }
-
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
