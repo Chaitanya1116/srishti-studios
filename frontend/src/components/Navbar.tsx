@@ -17,6 +17,7 @@ export const Navbar: React.FC = () => {
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Games', path: '/games' },
+    { name: 'Srishti Comics', path: '/comics' },
     { name: 'News', path: '/news' },
     { name: 'Careers', path: '/careers' },
     { name: 'Press Kit', path: '/press-kit' },
