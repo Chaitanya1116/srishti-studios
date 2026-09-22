@@ -22,7 +22,7 @@ export default function KageNoKoeDetails() {
   const [selectedComic, setSelectedComic] = useState<ComicModalState | null>(null);
   const [showTrailerModal, setShowTrailerModal] = useState(false);
 
-  const trailerPath = '/Kage No Koe_Trailer1.mp4';
+  const trailerPath = '/studios/kage-no-koe/trailer.mp4';
   const chapter1Path = '/Kage No Koe_Chapter 1.pdf';
   const chapter2Path = '/Kage No Koe_Chapter 2.pdf';
   const coverArtwork = 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=1200&auto=format&fit=crop';
