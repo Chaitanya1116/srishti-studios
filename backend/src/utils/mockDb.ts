@@ -167,7 +167,7 @@ const initialGames: Game[] = [
       'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop'
     ],
-    trailerUrl: '/Kage No Koe Trailer.mp4',
+    trailerUrl: '/Kage No Koe_Trailer1.mp4',
     downloadLinks: {
       steam: 'https://store.steampowered.com',
       epic: 'https://store.epicgames.com'
