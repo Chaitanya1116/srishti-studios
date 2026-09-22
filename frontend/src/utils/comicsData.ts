@@ -101,3 +101,4 @@ export function getComicBySlug(slug: string): ComicBook | undefined {
     return c.slug.toLowerCase() === slug.toLowerCase() || cNorm === norm || idNorm === norm;
   });
 }
+// Comic Data updated for 2026 release with uploaded custom PNG artwork.
